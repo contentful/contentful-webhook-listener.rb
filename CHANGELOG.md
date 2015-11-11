@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## v0.0.2
 ### Changed
 * Refactored to comply with RuboCop
 
