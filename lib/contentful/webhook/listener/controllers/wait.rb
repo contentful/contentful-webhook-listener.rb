@@ -9,8 +9,8 @@ module Contentful
         class Wait < Base
           attr_reader :webhook_timeout
 
-          def initialize(server, wh_timeout, *options)
-            super(server, options)
+          def initialize(server, logger, wh_timeout, *options)
+            super(server, logger, options)
             @webhook_timeout = wh_timeout
           end
 

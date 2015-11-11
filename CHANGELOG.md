@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+### Added
+* `logger` now available from Controllers
 
 ## v0.0.3
 ### Fixed

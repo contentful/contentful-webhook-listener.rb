@@ -2,6 +2,7 @@ require 'thread'
 require 'webrick'
 require 'stringio'
 require 'contentful/webhook/listener/controllers'
+require 'contentful/webhook/listener/support'
 
 module Contentful
   module Webhook
@@ -60,7 +61,7 @@ module Contentful
             Port: @port,
             BindAddress: @address,
             AccessLog: [],
-            Logger: @logger
+            Logger: Contentful::Webhook::Listener::Support::NullLogger.new
           )
         end
 
@@ -70,6 +71,7 @@ module Contentful
             server.mount(
               endpoint_config[:endpoint],
               endpoint_config[:controller],
+              @logger,
               endpoint_config[:timeout]
             )
 

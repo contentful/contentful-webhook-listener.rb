@@ -7,6 +7,13 @@ module Contentful
         # Abstract Base Controller
         # Extend and redefine #perform to run a process in background
         class Base < WEBrick::HTTPServlet::AbstractServlet
+          attr_reader :logger
+
+          def initialize(server, logger, *options)
+            super(server, options)
+            @logger = logger
+          end
+
           def respond(request, response)
             response.body = ''
             response.status = 200
