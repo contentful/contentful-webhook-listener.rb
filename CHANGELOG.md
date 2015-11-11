@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## v0.1.0
 ### Added
 * Full Spec Coverage
 
