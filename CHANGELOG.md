@@ -1,10 +1,12 @@
 # Changelog
 
 ## Unreleased
+
+## v0.0.3
 ### Fixed
 * Fixed require on `Server`
 
-## v0.0.2
+## v0.0.2 [YANKED]
 ### Changed
 * Refactored to comply with RuboCop
 
