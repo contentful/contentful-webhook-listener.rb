@@ -1,7 +1,7 @@
 require 'thread'
 require 'webrick'
 require 'stringio'
-require 'contentful/webhook/listener/controllers/base'
+require 'contentful/webhook/listener/controllers'
 
 module Contentful
   module Webhook

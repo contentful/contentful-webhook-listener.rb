@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+### Fixed
+* Fixed require on `Server`
 
 ## v0.0.2
 ### Changed
