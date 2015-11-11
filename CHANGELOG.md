@@ -1,6 +1,11 @@
 # Changelog
 
 ## Unreleased
+### Added
+* Full Spec Coverage
+
+### Changed
+* Small refactor on Server
 
 ## v0.0.4
 ### Added

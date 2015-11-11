@@ -34,7 +34,7 @@ module Contentful
           Thread.new { Server.new(config).start }
         end
 
-        attr_reader :port, :address, :endpoints, :logger
+        attr_reader :port, :address, :endpoints, :logger, :server
 
         def initialize(config = {})
           @port = config.fetch(:port, DEFAULT_PORT)
@@ -49,15 +49,16 @@ module Contentful
         def start
           logger.info "Webhook server starting at: http://#{@address}:#{@port}"
 
+          @server = create_server
           mount_endpoints
 
-          server.start
+          @server.start
         end
 
         protected
 
-        def server
-          @server ||= WEBrick::HTTPServer.new(
+        def create_server
+          WEBrick::HTTPServer.new(
             Port: @port,
             BindAddress: @address,
             AccessLog: [],
@@ -68,7 +69,7 @@ module Contentful
         def mount_endpoints
           logger.info 'Available Endpoints:'
           @endpoints.each do |endpoint_config|
-            server.mount(
+            @server.mount(
               endpoint_config[:endpoint],
               endpoint_config[:controller],
               @logger,
