@@ -1,20 +1,23 @@
-require "thread"
+require 'thread'
 
 module Contentful
   module Webhook
     module Listener
       module Controllers
+        # Wait Controller
+        # Sleeps a determined amount of `:timeout` seconds on #perform
         class Wait < Base
-          attr_reader :timeout
+          attr_reader :webhook_timeout
 
           def initialize(server, wh_timeout, *options)
             super(server, options)
-            @timeout = wh_timeout
+            @webhook_timeout = wh_timeout
           end
 
           protected
-          def perform(request, response)
-            sleep(self.timeout)
+
+          def perform(_request, _response)
+            sleep(webhook_timeout)
           end
         end
       end

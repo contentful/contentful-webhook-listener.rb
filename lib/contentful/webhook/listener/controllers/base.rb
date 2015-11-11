@@ -1,12 +1,14 @@
-require "webrick"
+require 'webrick'
 
 module Contentful
   module Webhook
     module Listener
       module Controllers
+        # Abstract Base Controller
+        # Extend and redefine #perform to run a process in background
         class Base < WEBrick::HTTPServlet::AbstractServlet
           def respond(request, response)
-            response.body = ""
+            response.body = ''
             response.status = 200
 
             Thread.new do
@@ -18,8 +20,9 @@ module Contentful
           alias_method :do_POST, :respond
 
           protected
-          def perform(request, response)
-            raise "must implement"
+
+          def perform(_request, _response)
+            fail 'must implement'
           end
         end
       end

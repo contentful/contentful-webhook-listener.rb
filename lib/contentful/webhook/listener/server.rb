@@ -1,18 +1,28 @@
 require 'thread'
 require 'webrick'
 require 'stringio'
-require "contentful/webhook/listener/controllers/base"
+require 'contentful/webhook/listener/controllers/base'
 
 module Contentful
   module Webhook
     module Listener
+      # Server is the responsible for handling Webhook receiver endpoints
+      # Configuration defaults are:
+      #   - port: 5678
+      #   - address: '0.0.0.0'
+      #   - logger: Contentful::Webhook::Support::NullLogger.new
+      #   - endpoints: [{
+      #       endpoint: '/receive',
+      #       controller: Contentful::Webhook::Listener::Controllers::Wait,
+      #       timeout: 300
+      #     }]
       class Server
         DEFAULT_PORT = 5678
-        DEFAULT_ADDRESS = "0.0.0.0"
+        DEFAULT_ADDRESS = '0.0.0.0'
         DEFAULT_ENDPOINTS = [
           {
-            endpoint: "/receive",
-            controller: Contentful::Webhook::Listener::Controllers::Base,
+            endpoint: '/receive',
+            controller: Contentful::Webhook::Listener::Controllers::Wait,
             timeout: 300
           }
         ]
@@ -29,21 +39,52 @@ module Contentful
           @port = config.fetch(:port, DEFAULT_PORT)
           @address = config.fetch(:address, DEFAULT_ADDRESS)
           @endpoints = config.fetch(:endpoints, DEFAULT_ENDPOINTS)
-          @logger = config.fetch(:logger, Contentful::Webhook::Listener::Support::NullLogger.new)
+          @logger = config.fetch(
+            :logger,
+            Contentful::Webhook::Listener::Support::NullLogger.new
+          )
         end
 
         def start
-          @server = WEBrick::HTTPServer.new(:Port => @port, :BindAddress => @address, :AccessLog => [], :Logger => @logger)
-
           logger.info "Webhook server starting at: http://#{@address}:#{@port}"
-          logger.info "Available Endpoints:"
+
+          mount_endpoints
+
+          server.start
+        end
+
+        protected
+
+        def server
+          @server ||= WEBrick::HTTPServer.new(
+            Port: @port,
+            BindAddress: @address,
+            AccessLog: [],
+            Logger: @logger
+          )
+        end
+
+        def mount_endpoints
+          logger.info 'Available Endpoints:'
           @endpoints.each do |endpoint_config|
-            @server.mount endpoint_config[:endpoint], endpoint_config[:controller], endpoint_config[:timeout]
+            server.mount(
+              endpoint_config[:endpoint],
+              endpoint_config[:controller],
+              endpoint_config[:timeout]
+            )
 
-            logger.info "\t#{endpoint_config[:endpoint]} - Controller: #{endpoint_config[:controller].name} - Timeout: #{endpoint_config[:timeout]}"
+            log_endpoint_data(endpoint_config)
           end
+        end
 
-          @server.start
+        def log_endpoint_data(endpoint_config)
+          endpoint_data = [
+            endpoint_config[:endpoint],
+            "Controller: #{endpoint_config[:controller].name}",
+            "Timeout: #{endpoint_config[:timeout]}"
+          ]
+
+          logger.info "\t#{endpoint_data.join(' - ')}"
         end
       end
     end

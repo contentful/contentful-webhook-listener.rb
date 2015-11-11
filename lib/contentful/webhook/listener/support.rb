@@ -1,1 +1,1 @@
-require "contentful/webhook/listener/support/null_logger.rb"
+require 'contentful/webhook/listener/support/null_logger.rb'

@@ -2,8 +2,9 @@ module Contentful
   module Webhook
     module Listener
       module Support
+        # NullLogger will silence any call to the :logger instance
         class NullLogger
-          def write(body)
+          def write(_body)
             nil
           end
 
