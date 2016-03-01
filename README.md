@@ -30,24 +30,23 @@ Or install it yourself as:
 
 ## Usage
 
-Require gem:
+* Require gem:
 
 ```ruby
 require 'contentful/webhook/listener'
 ```
 
-Create your own Controllers:
+* Create your own Controllers:
 
 ```ruby
-class MyController < Contentful::Webhook::Listener::Controllers::Wait
+class MyController < Contentful::Webhook::Listener::Controllers::Base
   def perform(request, response)
-    super(request, response)
     "do your process..." # This will run on a brackground Thread
   end
 end
 ```
 
-Configure and start your Webhook Listener
+* Configure and start your Webhook Listener
 
 ```ruby
 require 'logger'
@@ -67,6 +66,57 @@ end
 ```
 
 You can add multiple endpoints, each with it's own Controller.
+
+### Webhook Aware Controllers
+
+You can create controllers that can respond on specific Webhook events.
+
+```ruby
+class MyController < Contentful::Webhook::Listener::Controllers::WebhookAware
+  def publish
+    # Do stuff on publish
+    if webhook.entry?
+      logger.info "published Entry ID: #{webhook.id} for Space: #{webhook.space_id}"
+    end
+  end
+
+  def unpublish
+    # Do stuff on unpublish
+  end
+
+  def archive
+    # Do stuff on archive
+  end
+
+  def unarchive
+    # Do stuff on unarchive
+  end
+
+  def create
+    # Do stuff on create
+  end
+
+  def save
+    # Do stuff on save
+  end
+
+  def delete
+    # Do stuff on delete
+  end
+end
+```
+
+The controller has a `webhook` object bound when invoked, that has a few helpers:
+
+* `webhook.entry?` will return if the webhook was fired for an Entry
+* `webhook.asset?` will return if the webhook was fired for an Asset
+* `webhook.content_type?` will return if the webhook was fired for a Content Type
+
+* `webhook.id` will return the Resource (Entry/Asset/Content Type) ID
+* `webhook.space_id` will return the Space ID
+
+* `webhook.sys` will include the metadata for the resource
+* `webhook.fields` will include the resource fields (not included on Unpublish)
 
 ## Contributing
 

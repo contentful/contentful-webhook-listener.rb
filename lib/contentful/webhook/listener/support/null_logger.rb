@@ -4,7 +4,7 @@ module Contentful
       module Support
         # NullLogger will silence any call to the :logger instance
         class NullLogger
-          def write(_body)
+          def write(*)
             nil
           end
 
@@ -12,6 +12,8 @@ module Contentful
           alias_method :debug, :write
           alias_method :warn, :write
           alias_method :error, :write
+          alias_method :fatal, :write
+          alias_method :debug?, :write
         end
       end
     end

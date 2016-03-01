@@ -19,7 +19,7 @@ module Contentful
             response.status = 200
 
             Thread.new do
-              perform(request, response)
+                perform(request, response)
             end
           end
 
