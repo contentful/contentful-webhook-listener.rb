@@ -1,4 +1,5 @@
 require 'thread'
+require 'contentful/webhook/listener/controllers/base'
 
 module Contentful
   module Webhook

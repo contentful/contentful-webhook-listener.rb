@@ -1,19 +1,5 @@
 require 'spec_helper'
 
-class Contentful::Webhook::Listener::Controllers::Wait
-  @@sleeping = false
-
-  def sleep(time)
-    @@sleeping = true
-  end
-
-  def self.sleeping
-    value = @@sleeping
-    @@sleeping = false
-    value
-  end
-end
-
 describe Contentful::Webhook::Listener::Controllers::Wait do
   let(:server) { MockServer.new }
   let(:logger) { Contentful::Webhook::Listener::Support::NullLogger.new }
@@ -31,9 +17,7 @@ describe Contentful::Webhook::Listener::Controllers::Wait do
       # This spec requires to read/erase a Class Variable
       # because RSpec doesn't know how to test within spawned Threads
       it "##{name} wait on background" do
-        wait.send(name, MockRequest.new, MockResponse.new)
-
-        sleep(0.1) # Wait for Thread to actually run
+        wait.send(name, MockRequest.new, MockResponse.new).join
 
         expect(wait.class.sleeping).to be_truthy
       end
