@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## v0.2.0
 ### Added
 * Added `WebhookAware` controller
 
