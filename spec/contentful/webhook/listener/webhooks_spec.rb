@@ -52,7 +52,7 @@ describe Contentful::Webhook::Listener::BaseWebhook do
   let(:body) { {'sys' => { 'id' => 'foo', 'space' => { 'sys' => { 'id' => 'space_foo' } } }, 'fields' => {} } }
   let(:topic) { 'ContentfulManagement.Entry.publish' }
   let(:name) { 'WebhookName' }
-  let(:headers) { {'X-Contentful-Topic' => topic, 'X-Contentful-Webhook-Name' => name} }
+  let(:headers) { {'x-contentful-topic' => topic, 'x-contentful-webhook-name' => name} }
   subject { described_class.new(headers, body) }
 
   describe 'attributes' do
@@ -92,34 +92,34 @@ describe Contentful::Webhook::Listener::BaseWebhook do
           expect(described_class.new(headers, body).entry?).to be_truthy
         end
         it 'false when kind != Entry' do
-          headers['X-Contentful-Topic'] = 'ContentfulManagement.Asset.publish'
+          headers['x-contentful-topic'] = 'ContentfulManagement.Asset.publish'
           expect(described_class.new(headers, body).entry?).to be_falsey
 
-          headers['X-Contentful-Topic'] = 'ContentfulManagement.ContentType.publish'
+          headers['x-contentful-topic'] = 'ContentfulManagement.ContentType.publish'
           expect(described_class.new(headers, body).entry?).to be_falsey
         end
       end
       describe '#asset?' do
         it 'true when kind == Asset' do
-          headers['X-Contentful-Topic'] = 'ContentfulManagement.Asset.publish'
+          headers['x-contentful-topic'] = 'ContentfulManagement.Asset.publish'
           expect(described_class.new(headers, body).asset?).to be_truthy
         end
         it 'false when kind != Asset' do
           expect(described_class.new(headers, body).asset?).to be_falsey
 
-          headers['X-Contentful-Topic'] = 'ContentfulManagement.ContentType.publish'
+          headers['x-contentful-topic'] = 'ContentfulManagement.ContentType.publish'
           expect(described_class.new(headers, body).asset?).to be_falsey
         end
       end
       describe '#content_type?' do
         it 'true when kind == ContentType' do
-          headers['X-Contentful-Topic'] = 'ContentfulManagement.ContentType.publish'
+          headers['x-contentful-topic'] = 'ContentfulManagement.ContentType.publish'
           expect(described_class.new(headers, body).content_type?).to be_truthy
         end
         it 'false when kind != ContentType' do
           expect(described_class.new(headers, body).content_type?).to be_falsey
 
-          headers['X-Contentful-Topic'] = 'ContentfulManagement.Asset.publish'
+          headers['x-contentful-topic'] = 'ContentfulManagement.Asset.publish'
           expect(described_class.new(headers, body).content_type?).to be_falsey
         end
       end
@@ -131,7 +131,7 @@ describe Contentful::Webhook::Listener::FieldWebhook do
   let(:body) { {'sys' => { 'id' => 'foo', 'space' => { 'sys' => { 'id' => 'space_foo' } } }, 'fields' => {} } }
   let(:topic) { 'ContentfulManagement.Entry.publish' }
   let(:name) { 'WebhookName' }
-  let(:headers) { {'X-Contentful-Topic' => topic, 'X-Contentful-Webhook-Name' => name} }
+  let(:headers) { {'x-contentful-topic' => topic, 'x-contentful-webhook-name' => name} }
   subject { described_class.new(headers, body) }
 
   describe 'attributes' do

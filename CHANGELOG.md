@@ -1,6 +1,10 @@
 # Changelog
 
 ## Unreleased
+### Fixed
+* Fixes Headers for case-insensitive retrieval
+
+## v0.2.0
 ### Added
 * Added `WebhookAware` controller
 

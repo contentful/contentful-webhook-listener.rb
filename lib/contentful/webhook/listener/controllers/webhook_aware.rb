@@ -35,13 +35,19 @@ module Contentful
           protected
 
           def perform(request, response)
-            @webhook = WebhookFactory.new(request).create
+            begin
+              @webhook = WebhookFactory.new(request).create
+            rescue Exception => e
+              logger.error e
+              response.body = "Not a Webhook"
+              response.status = 400
+              return
+            end
+
             super(request, response)
+
             logger.debug "Webhook Data: {id: #{webhook.id}, space_id: #{webhook.space_id}, kind: #{webhook.kind}, event: #{webhook.event}}"
             send(webhook.event)
-          rescue
-            response.body = "Not a Webhook"
-            response.status = 400
           end
         end
       end
