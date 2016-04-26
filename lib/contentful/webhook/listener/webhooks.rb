@@ -4,14 +4,14 @@ module Contentful
   module Webhook
     module Listener
       module WebhookConstants
-        WEBHOOK_TOPIC = 'X-Contentful-Topic'
-        WEBHOOK_NAME = 'X-Contentful-Webhook-Name'
+        WEBHOOK_TOPIC = 'x-contentful-topic'
+        WEBHOOK_NAME = 'x-contentful-webhook-name'
       end
 
       class WebhookFactory
         def initialize(request)
           @headers = {}
-          request.each { |header, value| @headers[header] = value }
+          request.each { |header, value| @headers[header.downcase] = value }
           @body = JSON.load(request.body)
         end
 
