@@ -18,8 +18,12 @@ module Contentful
             response.body = ''
             response.status = 200
 
+            pre_perform(request, response)
+
+            return if response.status != 200
+
             Thread.new do
-                perform(request, response)
+              perform(request, response)
             end
           end
 
@@ -27,6 +31,11 @@ module Contentful
           alias_method :do_POST, :respond
 
           protected
+
+          def pre_perform(_request, _response)
+          ensure
+            _response
+          end
 
           def perform(_request, _response)
             fail 'must implement'

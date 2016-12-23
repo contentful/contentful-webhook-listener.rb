@@ -44,6 +44,12 @@ describe Contentful::Webhook::Listener::WebhookFactory do
           expect(webhook).to be_a Contentful::Webhook::Listener::DeleteWebhook
         end
       end
+
+      describe 'errors' do
+        it 'raises an error when it cant detect webhook' do
+          expect { described_class.new(RequestDummy.new({}, body)).create }.to raise_error "Could not detect Webhook class"
+        end
+      end
     end
   end
 end

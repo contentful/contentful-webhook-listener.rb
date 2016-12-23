@@ -19,6 +19,8 @@ module Contentful
 
           def perform(_request, _response)
             sleep(webhook_timeout)
+          ensure
+            _response
           end
         end
       end
