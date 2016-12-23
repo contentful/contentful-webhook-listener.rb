@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.3.0
+### Fixed
+* Fix race condition on response [#4](https://github.com/contentful/contentful-webhook-listener.rb/issues/4)
+
 ## v0.2.1
 ### Fixed
 * Fixes Headers for case-insensitive retrieval
