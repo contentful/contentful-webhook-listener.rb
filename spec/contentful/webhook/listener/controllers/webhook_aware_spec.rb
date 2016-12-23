@@ -18,7 +18,7 @@ describe Contentful::Webhook::Listener::Controllers::WebhookAware do
 
   it 'returns 400 Bad Request on non-webhook call' do
     response = MockResponse.new
-    subject.respond(RequestDummy.new(nil, "foo"), response).join
+    subject.respond(RequestDummy.new(nil, "foo"), response)
 
     expect(response.status).to eq(400)
     expect(response.body).to eq('Not a Webhook')

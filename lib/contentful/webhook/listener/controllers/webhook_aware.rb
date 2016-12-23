@@ -34,20 +34,22 @@ module Contentful
 
           protected
 
-          def perform(request, response)
-            begin
-              @webhook = WebhookFactory.new(request).create
-            rescue Exception => e
-              logger.error e
-              response.body = "Not a Webhook"
-              response.status = 400
-              return
-            end
+          def pre_perform(request, response)
+            @webhook = WebhookFactory.new(request).create
+          rescue Exception => e
+            logger.error 'Not a Webhook. Stacktrace: '
+            logger.error e
+            response.body = "Not a Webhook"
+            response.status = 400
+          end
 
+          def perform(request, response)
             super(request, response)
 
             logger.debug "Webhook Data: {id: #{webhook.id}, space_id: #{webhook.space_id}, kind: #{webhook.kind}, event: #{webhook.event}}"
             send(webhook.event)
+          ensure
+            response
           end
         end
       end

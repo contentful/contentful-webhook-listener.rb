@@ -28,6 +28,8 @@ module Contentful
         def webhook_class_name
           event_name = @headers[::Contentful::Webhook::Listener::WebhookConstants::WEBHOOK_TOPIC].split('.')[-1].split('_').collect(&:capitalize).join
           "Contentful::Webhook::Listener::#{event_name}Webhook"
+        rescue Exception
+          fail 'Could not detect Webhook class'
         end
       end
 
